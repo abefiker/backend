@@ -12,7 +12,28 @@ export const registerHouse = async (req: Request, res: Response): Promise<any> =
             throw new RequestValidationError(errors.array());
         }
 
-        const { name, location, address, price, description, bedrooms, hasBalcony } = req.body;
+        const { name, location, address, price, description, bedrooms, hasBalcony, photos } = req.body;
+
+        // Convert `photos` from JSON string (if sent as a string)
+        let photoUrls: string[] = [];
+        if (typeof photos === "string") {
+            try {
+                photoUrls = JSON.parse(photos); // Parse if sent as a JSON string
+            } catch (error) {
+                console.error("Invalid JSON format for photos:", error);
+                return res.status(400).json({ error: "Invalid JSON format for photos." });
+            }
+        } else if (Array.isArray(photos)) {
+            photoUrls = photos; // If it's already an array, use it directly
+        }
+
+        // Extract uploaded images (if any)
+        if (req.files) {
+            const uploadedFiles = (req.files as Express.Multer.File[]).map((file) => file.path);
+            photoUrls = [...photoUrls, ...uploadedFiles]; // Merge with existing URLs
+        }
+
+        // Create house entry
         const house = new House({
             name,
             location,
@@ -20,26 +41,20 @@ export const registerHouse = async (req: Request, res: Response): Promise<any> =
             price,
             description,
             bedrooms,
-            hasBalcony
+            hasBalcony,
+            photos: photoUrls, // Now includes both URLs and uploaded images
         });
 
-        // Saving to MongoDB
+        // Save to MongoDB
         await house.save();
         return res.status(201).send({ message: 'House registered successfully', house });
 
     } catch (err: any) {
-        // Log the error for debugging
         console.error(err);
-
-        // Handle different types of errors and return appropriate responses
-        if (err instanceof RequestValidationError) {
-            return res.status(400).json({ errors: err.errors });
-        }
-
-        // Generic error response
         return res.status(500).json({ errors: "Something went wrong" });
     }
 };
+
 export const registerHotel = async (req: Request, res: Response): Promise<any> => {
     try {
         // Validate request
@@ -48,7 +63,19 @@ export const registerHotel = async (req: Request, res: Response): Promise<any> =
             throw new RequestValidationError(errors.array());
         }
 
-        const { name, location, address, price, description, bedrooms, starts, hasJacuzzi } = req.body;
+        const { name, location, address, price, description, bedrooms, starts, hasJacuzzi, photos } = req.body;
+        // Convert `photos` from JSON string (if sent as a string)
+        let photoUrls: string[] = [];
+        if (typeof photos === "string") {
+            try {
+                photoUrls = JSON.parse(photos); // Parse if sent as a JSON string
+            } catch (error) {
+                console.error("Invalid JSON format for photos:", error);
+                return res.status(400).json({ error: "Invalid JSON format for photos." });
+            }
+        } else if (Array.isArray(photos)) {
+            photoUrls = photos; // If it's already an array, use it directly
+        }
         const hotel = new Hotel({
             name,
             location,
@@ -57,7 +84,8 @@ export const registerHotel = async (req: Request, res: Response): Promise<any> =
             description,
             bedrooms,
             starts,
-            hasJacuzzi
+            hasJacuzzi,
+            photos: photoUrls,
         });
 
         // Saving to MongoDB
@@ -85,7 +113,19 @@ export const registerPension = async (req: Request, res: Response): Promise<any>
             throw new RequestValidationError(errors.array());
         }
 
-        const { name, location, address, price, description,  hasParking, petFriendly } = req.body;
+        const { name, location, address, price, description, hasParking, petFriendly, photos } = req.body;
+        // Convert `photos` from JSON string (if sent as a string)
+        let photoUrls: string[] = [];
+        if (typeof photos === "string") {
+            try {
+                photoUrls = JSON.parse(photos); // Parse if sent as a JSON string
+            } catch (error) {
+                console.error("Invalid JSON format for photos:", error);
+                return res.status(400).json({ error: "Invalid JSON format for photos." });
+            }
+        } else if (Array.isArray(photos)) {
+            photoUrls = photos; // If it's already an array, use it directly
+        }
         const hotel = new Pension({
             name,
             location,
@@ -93,7 +133,8 @@ export const registerPension = async (req: Request, res: Response): Promise<any>
             price,
             description,
             hasParking,
-            petFriendly
+            petFriendly,
+            photos: photoUrls,
         });
 
         // Saving to MongoDB

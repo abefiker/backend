@@ -11,6 +11,7 @@ interface IProperty extends Document {
     price: number;
     description: string;
     type: 'house' | 'hotel' | 'pension'; // Discriminator key
+    photos?: string[]
 }
 
 // Base schema (common fields)
@@ -25,6 +26,7 @@ const PropertySchema = new Schema<IProperty>(
         price: { type: Number, required: true },
         description: { type: String, required: true },
         type: { type: String, required: true, enum: ['house', 'hotel', 'pension'] }, // Discriminator key
+        photos: [String]
     },
     { discriminatorKey: 'type', timestamps: true }
 );

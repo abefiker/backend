@@ -5,12 +5,12 @@ import { updateHouse, updateHotel, updatePension } from '../controllers/staysCon
 import { oneHouse, oneHotel, onePension } from '../controllers/staysController/oneStay';
 import { deleteHouse, deleteHotel, deletePension } from '../controllers/staysController/deleteStay';
 import { houseValidationRules, hotelValidationRules, pensionValidationRules } from '../middlewares/staysValidation';
-
+import { upload } from '../middlewares/upload';
 
 // pension
 const router = express.Router();
 // house
-router.route('/houses').post(houseValidationRules, registerHouse).get(displayHouse);
+router.route('/houses').post(upload.array('photo', 5), houseValidationRules, registerHouse).get(displayHouse);
 router.route('/houses/:id').put(houseValidationRules, updateHouse).get(oneHouse).delete(deleteHouse)
 // hotel
 router.route('/hotel').post(hotelValidationRules, registerHotel).get(displayHotel)
