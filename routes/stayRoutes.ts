@@ -13,9 +13,9 @@ const router = express.Router();
 router.route('/houses').post(upload.array('photo', 5), houseValidationRules, registerHouse).get(displayHouse);
 router.route('/houses/:id').put(houseValidationRules, updateHouse).get(oneHouse).delete(deleteHouse)
 // hotel
-router.route('/hotel').post(hotelValidationRules, registerHotel).get(displayHotel)
-router.route('/hotel/:id').put(hotelValidationRules,).get(oneHotel).delete(deleteHotel)
+router.route('/hotels').post(hotelValidationRules, registerHotel).get(displayHotel)
+router.route('/hotels/:id').put(hotelValidationRules,).get(oneHotel).delete(deleteHotel)
 // pension
-router.route('/pension').post(pensionValidationRules, registerPension).get(displayPension)
-router.route('/pension/:id').put(pensionValidationRules).get(onePension).delete(deletePension)
+router.route('/pensions').post(pensionValidationRules, registerPension).get(displayPension)
+router.route('/pensions/:id').put(pensionValidationRules).get(onePension).delete(deletePension)
 export default router;

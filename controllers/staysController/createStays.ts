@@ -63,7 +63,7 @@ export const registerHotel = async (req: Request, res: Response): Promise<any> =
             throw new RequestValidationError(errors.array());
         }
 
-        const { name, location, address, price, description, bedrooms, starts, hasJacuzzi, photos } = req.body;
+        const { name, location, address, price, description, bedrooms, stars, hasJacuzzi, photos } = req.body;
         // Convert `photos` from JSON string (if sent as a string)
         let photoUrls: string[] = [];
         if (typeof photos === "string") {
@@ -83,7 +83,7 @@ export const registerHotel = async (req: Request, res: Response): Promise<any> =
             price,
             description,
             bedrooms,
-            starts,
+            stars,
             hasJacuzzi,
             photos: photoUrls,
         });
