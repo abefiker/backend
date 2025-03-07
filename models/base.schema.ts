@@ -12,6 +12,12 @@ interface IProperty extends Document {
     description: string;
     type: 'house' | 'hotel' | 'pension'; // Discriminator key
     photos?: string[]
+    customerRating?: number; // Added customerRating
+    contact?: {
+        phone?: string
+        email?: string
+        website?: string
+    }
 }
 
 // Base schema (common fields)
@@ -26,7 +32,13 @@ const PropertySchema = new Schema<IProperty>(
         price: { type: Number, required: true },
         description: { type: String, required: true },
         type: { type: String, required: true, enum: ['house', 'hotel', 'pension'] }, // Discriminator key
-        photos: [String]
+        photos: [String],
+        customerRating: { type: Number, min: 1, max: 5, default: 0 },
+        contact: {
+            phone: { type: String },
+            email: { type: String },
+            website: { type: String },
+        },
     },
     { discriminatorKey: 'type', timestamps: true }
 );

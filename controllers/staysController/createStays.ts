@@ -12,27 +12,7 @@ export const registerHouse = async (req: Request, res: Response): Promise<any> =
             throw new RequestValidationError(errors.array());
         }
 
-        const { name, location, address, price, description, bedrooms, hasBalcony, photos } = req.body;
-
-        // Convert `photos` from JSON string (if sent as a string)
-        let photoUrls: string[] = [];
-        if (typeof photos === "string") {
-            try {
-                photoUrls = JSON.parse(photos); // Parse if sent as a JSON string
-            } catch (error) {
-                console.error("Invalid JSON format for photos:", error);
-                return res.status(400).json({ error: "Invalid JSON format for photos." });
-            }
-        } else if (Array.isArray(photos)) {
-            photoUrls = photos; // If it's already an array, use it directly
-        }
-
-        // Extract uploaded images (if any)
-        if (req.files) {
-            const uploadedFiles = (req.files as Express.Multer.File[]).map((file) => file.path);
-            photoUrls = [...photoUrls, ...uploadedFiles]; // Merge with existing URLs
-        }
-
+        const { name, location, address, price, description, bedrooms, hasBalcony, photos, customerRating, contact } = req.body;
         // Create house entry
         const house = new House({
             name,
@@ -42,7 +22,9 @@ export const registerHouse = async (req: Request, res: Response): Promise<any> =
             description,
             bedrooms,
             hasBalcony,
-            photos: photoUrls, // Now includes both URLs and uploaded images
+            photos,
+            customerRating,
+            contact
         });
 
         // Save to MongoDB
@@ -63,19 +45,7 @@ export const registerHotel = async (req: Request, res: Response): Promise<any> =
             throw new RequestValidationError(errors.array());
         }
 
-        const { name, location, address, price, description, bedrooms, stars, hasJacuzzi, photos } = req.body;
-        // Convert `photos` from JSON string (if sent as a string)
-        let photoUrls: string[] = [];
-        if (typeof photos === "string") {
-            try {
-                photoUrls = JSON.parse(photos); // Parse if sent as a JSON string
-            } catch (error) {
-                console.error("Invalid JSON format for photos:", error);
-                return res.status(400).json({ error: "Invalid JSON format for photos." });
-            }
-        } else if (Array.isArray(photos)) {
-            photoUrls = photos; // If it's already an array, use it directly
-        }
+        const { name, location, address, price, description, bedrooms, stars, hasJacuzzi, photos, customerRating, contact } = req.body;
         const hotel = new Hotel({
             name,
             location,
@@ -85,7 +55,9 @@ export const registerHotel = async (req: Request, res: Response): Promise<any> =
             bedrooms,
             stars,
             hasJacuzzi,
-            photos: photoUrls,
+            photos,
+            customerRating,
+            contact
         });
 
         // Saving to MongoDB
@@ -113,7 +85,7 @@ export const registerPension = async (req: Request, res: Response): Promise<any>
             throw new RequestValidationError(errors.array());
         }
 
-        const { name, location, address, price, description, hasParking, petFriendly, photos } = req.body;
+        const { name, location, address, price, description, hasParking, petFriendly, photos, customerRating, contact } = req.body;
         // Convert `photos` from JSON string (if sent as a string)
         let photoUrls: string[] = [];
         if (typeof photos === "string") {
@@ -134,7 +106,9 @@ export const registerPension = async (req: Request, res: Response): Promise<any>
             description,
             hasParking,
             petFriendly,
-            photos: photoUrls,
+            photos,
+            customerRating,
+            contact
         });
 
         // Saving to MongoDB
