@@ -4,16 +4,16 @@ import { displayHouse, displayHotel, displayPension } from '../controllers/stays
 import { updateHouse, updateHotel, updatePension } from '../controllers/staysController/updateStays'
 import { oneHouse, oneHotel, onePension } from '../controllers/staysController/oneStay';
 import { deleteHouse, deleteHotel, deletePension } from '../controllers/staysController/deleteStay';
-import { houseValidationRules, hotelValidationRules, pensionValidationRules } from '../middlewares/staysValidation';
+
 
 const router = express.Router();
 // house
-router.route('/houses').post(houseValidationRules, registerHouse).get(displayHouse);
-router.route('/houses/:id').put(houseValidationRules, updateHouse).get(oneHouse).delete(deleteHouse)
+router.route('/houses').post(registerHouse).get(displayHouse);
+router.route('/houses/:id').put(updateHouse).get(oneHouse).delete(deleteHouse)
 // hotel
-router.route('/hotels').post(hotelValidationRules, registerHotel).get(displayHotel)
-router.route('/hotels/:id').put(hotelValidationRules,).get(oneHotel).delete(deleteHotel)
+router.route('/hotels').post( registerHotel).get(displayHotel)
+router.route('/hotels/:id').put(updateHotel).get(oneHotel).delete(deleteHotel)
 // pension
-router.route('/pensions').post(pensionValidationRules, registerPension).get(displayPension)
-router.route('/pensions/:id').put(pensionValidationRules).get(onePension).delete(deletePension)
+router.route('/pensions').post( registerPension).get(displayPension)
+router.route('/pensions/:id').put(updatePension).get(onePension).delete(deletePension)
 export default router;

@@ -1,17 +1,9 @@
 import { Request, Response } from 'express';
-import { validationResult } from 'express-validator';
-import { RequestValidationError } from '../../errors/request.validation.error';
 import { House } from '../../models/house.schema';
 import { Hotel } from '../../models/hotel.schema';
 import { Pension } from '../../models/pension.schema';
 export const registerHouse = async (req: Request, res: Response): Promise<any> => {
     try {
-        // Validate request
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            throw new RequestValidationError(errors.array());
-        }
-
         const { name, location, address, price, description, bedrooms, hasBalcony, photos, customerRating, contact } = req.body;
         // Create house entry
         const house = new House({
@@ -39,12 +31,6 @@ export const registerHouse = async (req: Request, res: Response): Promise<any> =
 
 export const registerHotel = async (req: Request, res: Response): Promise<any> => {
     try {
-        // Validate request
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            throw new RequestValidationError(errors.array());
-        }
-
         const { name, location, address, price, description, bedrooms, stars, hasJacuzzi, photos, customerRating, contact } = req.body;
         const hotel = new Hotel({
             name,
@@ -66,25 +52,13 @@ export const registerHotel = async (req: Request, res: Response): Promise<any> =
 
     } catch (err: any) {
         // Log the error for debugging
-        console.error(err);
-
-        // Handle different types of errors and return appropriate responses
-        if (err instanceof RequestValidationError) {
-            return res.status(400).json({ errors: err.errors });
-        }
-
+        console.error(err)
         // Generic error response
         return res.status(500).json({ errors: "Something went wrong" });
     }
 }
 export const registerPension = async (req: Request, res: Response): Promise<any> => {
     try {
-        // Validate request
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            throw new RequestValidationError(errors.array());
-        }
-
         const { name, location, address, price, description, hasParking, petFriendly, photos, customerRating, contact } = req.body;
         // Convert `photos` from JSON string (if sent as a string)
         let photoUrls: string[] = [];
@@ -117,13 +91,7 @@ export const registerPension = async (req: Request, res: Response): Promise<any>
 
     } catch (err: any) {
         // Log the error for debugging
-        console.error(err);
-
-        // Handle different types of errors and return appropriate responses
-        if (err instanceof RequestValidationError) {
-            return res.status(400).json({ errors: err.errors });
-        }
-
+        console.error(err)
         // Generic error response
         return res.status(500).json({ errors: "Something went wrong" });
     }
